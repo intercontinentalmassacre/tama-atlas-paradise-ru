@@ -2,7 +2,11 @@
 
 Русскоязычная фанатская энциклопедия Tamagotchi и личная коллекция Paradise.
 
-Сайт: https://intercontinentalmassacre.github.io/tama-atlas-paradise-ru/
+Основной сайт: https://tamawikia.ru/
+
+Домен `tamawikia.online` обслуживается отдельным репозиторием `intercontinentalmassacre/tamawikia-redirect` и перенаправляет посетителя на основной адрес, сохраняя путь, параметры и ссылку на раздел. Перенаправление выполняется в браузере; это не серверный HTTP 301.
+
+DNS обслуживает Рег.ру, сайт и HTTPS — GitHub Pages. После изменения DNS нужно дождаться проверки домена и выпуска сертификата, затем включить Enforce HTTPS в настройках Pages обоих репозиториев.
 
 ## Разработка
 
