@@ -1,0 +1,28 @@
+/* The guide uses the same warm paper, berry type and lavender panels as the atlas. */
+.paradise-cover:not([hidden]) {position:relative;isolation:isolate;overflow:hidden;margin:20px 0 24px;border:1px solid #d6c6d7;border-radius:26px;background-color:#f4eaf8;background-image:radial-gradient(#dac8df 1px,transparent 1px);background-size:13px 13px;padding:clamp(24px,5vw,62px)}
+.paradise-cover h1 {font:700 clamp(44px,7vw,86px)/.97 Georgia,serif;letter-spacing:-.055em;color:#502747}
+.paradise-cover h1 em {color:#a04777}
+.paradise-cover .family {align-self:center;background:#ffedbf;border-radius:48% 58% 41% 54%;padding:12px}
+#guide .view-menu {display:inline-flex;gap:4px;background:#efe5f1;border-radius:22px;padding:5px}
+#guide .view-menu button {border:0;border-radius:18px;padding:9px 17px;background:transparent}
+#guide .view-menu button[aria-pressed=true] {background:#512c47;color:white}
+#guide .filters {background:#fffbf4;padding:18px 22px 22px;border:1px solid #e2d4cf;border-radius:18px}
+#guide .filters input,#guide .filters select {border-radius:12px;background:white}
+#guide #catalog {gap:16px}
+#guide .entry {background:#fffdf7;border:1px solid #dfd1cb;border-radius:20px;padding:18px;box-shadow:0 3px 0 #eadeda;transition:transform .18s}
+#guide .entry img {background:#f1e9f3;border-radius:15px;padding:4px;box-sizing:border-box}
+#guide .entry strong {font:700 1.18rem/1.18 Georgia,serif;color:#47283d}
+#guide .entry:hover {transform:translateY(-2px);border-color:#bd86a2}
+#guide .field {border-radius:20px;background:#fffdf7;border:1px solid #ddcfcd;padding:clamp(12px,2vw,24px)}
+#guide .field h2 {border-radius:12px;background:var(--field-bg,#f1e9f3);padding:12px 16px;color:var(--field-ink,#48273f)}
+.paradise-growth {clear:both;margin:1rem 0 0;border:1px solid #cbb8cf;border-radius:17px;background:#fffaf3;color:#402a3b;font:1rem/1.5 system-ui,sans-serif}
+.paradise-growth summary {cursor:pointer;padding:.8rem 1rem;font-weight:700}
+.paradise-growth > div {padding:0 1rem 1rem;display:grid;gap:1rem;max-height:65vh;overflow:auto}
+.paradise-growth table {border-collapse:collapse;table-layout:fixed;width:100%;min-width:0;text-align:left;font-size:.94rem}
+.paradise-growth caption {padding:.55rem .7rem;text-align:left;border-radius:9px;background:#f1e6f3;color:#512c47;font-weight:700}
+.paradise-growth td,.paradise-growth th {padding:.55rem .25rem;vertical-align:top;overflow-wrap:anywhere;border-bottom:1px solid #e6dce3}
+.paradise-growth th {width:32%}
+@media(max-width:600px){.paradise-cover:not([hidden]){display:grid;grid-template-columns:1fr}.paradise-cover .family{justify-self:end;margin-top:-8px}#guide .entry{padding:14px}}
+@media(prefers-reduced-motion:reduce){#guide .entry{transition:none}}
+.w-art::after {content:"";position:absolute;pointer-events:none;z-index:-1;left:31%;top:48%;width:35%;height:15%;border-radius:100px;background:#fffdf7;box-shadow:0 3px 0 #dbc6d4}
+.w-art::before {left:35%;top:37%;width:22%;height:27%;border:0;background:#fffdf7;border-radius:50%;transform:none;box-shadow:1.9vw .55vw 0 -.25vw #fffdf7,-1.45vw 1vw 0 -.3vw #fffdf7}

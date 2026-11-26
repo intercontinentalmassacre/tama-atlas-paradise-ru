@@ -115,6 +115,28 @@
   }
 
   updateCover();
+  function emergeFromCloud() {
+    if (motion.matches) return;
+    const art = document.querySelector('.w-art');
+    if (!art || !art.offsetWidth) return;
+    const cloud = art.getBoundingClientRect();
+    art.querySelectorAll('.w-sticker').forEach((sticker, index) => {
+      const portrait = sticker.querySelector('img');
+      const resting = sticker.getBoundingClientRect();
+      const x = cloud.left + cloud.width * .47 - resting.left - resting.width / 2;
+      const y = cloud.top + cloud.height * .54 - resting.top - resting.height / 2;
+      portrait.animate([
+        { transform: `translate(${x}px,${y}px) scale(.08)`, opacity: 0 },
+        { offset: .72, transform: 'translateY(-8px) scale(1.04)', opacity: 1 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 580, delay: index * 95, easing: 'cubic-bezier(.2,.7,.22,1)', fill: 'backwards' });
+    });
+  }
+  if (document.documentElement.dataset.introPending) {
+    window.addEventListener('atlas-intro-end', emergeFromCloud, {once:true});
+  } else {
+    requestAnimationFrame(emergeFromCloud);
+  }
   const runnersKey = 'tamawiki.lastRunFriends';
   let lastGroup = [];
   const directionKey = 'tamawiki.lastRunDirection';

@@ -1,5 +1,7 @@
 """Generate crawlable wiki articles, catalog pages and sitemap from the atlas data."""
 
+from paradise_growth import growth_tables
+
 import json
 import re
 from html import escape
@@ -199,7 +201,7 @@ def gallery_html(doc, entry, captions):
     return f'<section id="gallery" data-source="/{escape(entry["article"])}"><h2>Галерея <small>{len(doc["gallery"])}</small></h2>{filters}<div class="article-gallery">{"".join(pictures)}</div>{link}</section><script defer src="/wiki/gallery-more.js"></script>' 
 
 
-def article(entry, records, paradise_ids):
+def article(entry, records, paradise_ids, growth):
     doc = json.loads((DIST / entry["article"]).read_text())
     path = article_path(entry)
     name = display_name(entry)
@@ -216,9 +218,14 @@ def article(entry, records, paradise_ids):
     suffix = f" ({entry['title']})"
     hero_name = (escape(name[:-len(suffix)]) + f" <em>{escape(entry['title'])}</em>"
                  if name.endswith(suffix) else escape(name))
+    growth_panel = growth.get(entry["title"], "") if entry["kind"] == "character" else ""
     extras = ""
     if entry["id"] in paradise_ids:
-        extras = '<li><a href="/beginners.html">Первый запуск и уход в Tamagotchi Paradise</a></li><li><a href="/#guide">Таблицы роста и питания в «Мой Paradise»</a></li>'
+        extras = '<li><a href="/beginners.html">Первый запуск и уход в Tamagotchi Paradise</a></li>'
+        if entry["kind"] == "device":
+            extras += '<li><a href="/#guide">Таблицы роста и питания в «Мой Paradise»</a></li>'
+        elif not growth_panel:
+            growth_panel = '<details class="paradise-growth"><summary>Рост в Paradise</summary><div>В справочнике пока нет отдельной схемы роста для этого персонажа.</div></details>'
     related = []
     seen = {entry["id"]}
     for row in doc.get("related", ()):
@@ -258,7 +265,7 @@ def article(entry, records, paradise_ids):
     art = f'<div class="hero-art">{portrait}</div>' if portrait else ""
     body = f"""<p class="crumb">{back}</p>
 <article>
-<div class="article-head"><div class="hero-copy"><p class="kind">{subheading}</p><h1>{hero_name}</h1>{intro}<ul class="actions">{'<li><a href="#gallery">К галерее</a></li>' if gallery else ""}<li><a href="/#{'devices' if entry['kind'] == 'device' else 'characters'}" data-atlas-return>{'К устройствам' if entry['kind'] == 'device' else 'К персонажам'}</a></li>{extras}</ul></div>{art}</div>
+<div class="article-head"><div class="hero-copy"><p class="kind">{subheading}</p><h1>{hero_name}</h1>{intro}<ul class="actions">{'<li><a href="#gallery">К галерее</a></li>' if gallery else ""}<li><a href="/#{'devices' if entry['kind'] == 'device' else 'characters'}" data-atlas-return>{'К устройствам' if entry['kind'] == 'device' else 'К персонажам'}</a></li>{extras}</ul>{growth_panel}</div>{art}</div>
 <div class="reading-layout">{contents}<div class="story">{text}{connected}{credits}</div></div>
 {gallery}
 </article>"""
@@ -295,10 +302,11 @@ def main():
     paradise = next(entry for entry in entries if entry["title"] == "Tamagotchi Paradise" and entry["kind"] == "device")
     paradise_doc = json.loads((DIST / paradise["article"]).read_text())
     paradise_ids = {paradise["id"], *(row["id"] for row in paradise_doc.get("related", ()))}
+    growth = growth_tables((DIST / "index.html").read_text(encoding="utf8"))
     for kind, (path, _, _) in CATALOGS.items():
         (DIST / path[1:]).write_text(catalog(kind, [entry for entry in entries if entry["kind"] == kind]))
     for entry in entries:
-        (DIST / article_path(entry)[1:]).write_text(article(entry, records, paradise_ids))
+        (DIST / article_path(entry)[1:]).write_text(article(entry, records, paradise_ids, growth))
     paths = ["/", "/beginners.html", *(config[0] for config in CATALOGS.values()), *(article_path(entry) for entry in entries)]
     sitemap = "".join(f"  <url><loc>{escape(ORIGIN + path)}</loc></url>\n" for path in paths)
     (DIST / "sitemap.xml").write_text(
